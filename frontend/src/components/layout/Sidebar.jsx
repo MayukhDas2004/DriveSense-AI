@@ -1,47 +1,63 @@
-import {
-  FaTachometerAlt,
-  FaCar,
-  FaBell,
-  FaTools,
-  FaHistory,
-  FaCog,
-} from "react-icons/fa";
-
-const menuItems = [
-  { name: "Dashboard", icon: <FaTachometerAlt /> },
-  { name: "Live Sensors", icon: <FaCar /> },
-  { name: "Alerts", icon: <FaBell /> },
-  { name: "Maintenance", icon: <FaTools /> },
-  { name: "History", icon: <FaHistory /> },
-  { name: "Settings", icon: <FaCog /> },
-];
+import { motion } from "framer-motion";
+import NAVIGATION from "../../constants/navigation";
 
 function Sidebar() {
   return (
-    <aside className="w-64 min-h-screen bg-slate-900 text-white flex flex-col">
+    <aside className="w-72 min-h-screen bg-slate-950 border-r border-slate-800 flex flex-col">
+
       {/* Logo */}
-      <div className="p-6 border-b border-slate-700">
-  <h1 className="text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-    DriveSense AI
-  </h1>
+      <div className="p-8 border-b border-slate-800">
+        <h1 className="text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+          DriveSense AI
+        </h1>
 
-  <p className="text-gray-400 text-sm mt-1">
-    Edge Vehicle Monitoring
-  </p>
-</div>
+        <p className="text-slate-400 mt-2 text-sm">
+          Intelligent Vehicle Command Center
+        </p>
+      </div>
 
-      {/* Menu */}
-      <nav className="flex-1 mt-6">
-        {menuItems.map((item, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-3 px-6 py-4 hover:bg-slate-800 cursor-pointer transition-all duration-300"
-          >
-            <span className="text-lg">{item.icon}</span>
-            <span>{item.name}</span>
-          </div>
-        ))}
+      {/* Navigation */}
+      <nav className="flex-1 px-4 py-6 space-y-2">
+
+        {NAVIGATION.map((item, index) => {
+          const Icon = item.icon;
+
+          return (
+            <motion.div
+              key={item.id}
+              whileHover={{ x: 6 }}
+              transition={{ duration: 0.2 }}
+              className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all
+              ${
+                index === 0
+                  ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500"
+                  : "text-slate-300 hover:bg-slate-900"
+              }`}
+            >
+              <Icon size={22} />
+
+              <span className="font-medium">
+                {item.name}
+              </span>
+            </motion.div>
+          );
+        })}
+
       </nav>
+
+      {/* Footer */}
+      <div className="p-6 border-t border-slate-800">
+        <div className="rounded-xl bg-slate-900 p-4">
+          <p className="text-sm text-slate-400">
+            Vehicle Status
+          </p>
+
+          <p className="mt-2 text-green-400 font-semibold">
+            ● All Systems Normal
+          </p>
+        </div>
+      </div>
+
     </aside>
   );
 }
