@@ -1,4 +1,3 @@
-import random
 
 FAULTS = [
     "normal",
@@ -9,5 +8,3 @@ FAULTS = [
     "high_vibration"
 ]
 
-def get_random_fault():
-    return random.choice(FAULTS)
