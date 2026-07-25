@@ -1,24 +1,28 @@
 import joblib
-from pathlib import Path
 
 
-class ModelLoader:
+MODEL = None
+LABEL_ENCODER = None
+FEATURE_NAMES = None
 
-    def __init__(self):
-        self.model = None
+def load_model():
+    """
+    Load the trained model and label encoder.
+    """
 
-    def load(self, model_path: Path):
+    global MODEL
+    global LABEL_ENCODER
+    global FEATURE_NAMES
 
-        if model_path.exists():
-            self.model = joblib.load(model_path)
-            print("✅ ML Model Loaded")
+    if MODEL is None:
+        MODEL = joblib.load("trained_models/best_model.pkl")
+    if FEATURE_NAMES is None:
+        FEATURE_NAMES = joblib.load(
+        "trained_models/feature_names.pkl"
+        )
+    if LABEL_ENCODER is None:
+        LABEL_ENCODER = joblib.load(
+            "trained_models/label_encoder.pkl"
+        )
 
-        else:
-            print("⚠ No trained model found.")
-
-    def predict(self, data):
-
-        if self.model is None:
-            raise Exception("Model not loaded.")
-
-        return self.model.predict(data)
+    return MODEL, LABEL_ENCODER, FEATURE_NAMES
