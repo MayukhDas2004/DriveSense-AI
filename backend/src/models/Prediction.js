@@ -7,17 +7,22 @@ const predictionSchema = new mongoose.Schema(
       required: true,
     },
 
-    component: {
-      type: String,
-      required: true,
-    },
-
-    prediction: {
+    predictedFault: {
       type: String,
       required: true,
     },
 
     confidence: {
+      type: Number,
+      required: true,
+    },
+
+    status: {
+      type: String,
+      required: true,
+    },
+
+    healthScore: {
       type: Number,
       required: true,
     },
