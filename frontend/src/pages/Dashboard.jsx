@@ -1,39 +1,65 @@
+import useSensorData from "../hooks/useSensorData";
+import SmartAlerts from "../components/dashboard/SmartAlerts";
+import PageHeader from "../components/common/PageHeader";
 import SummaryCards from "../components/dashboard/SummaryCards";
 import SensorGrid from "../components/dashboard/SensorGrid";
-import TemperatureChart from "../components/charts/TemperatureChart";
-import BatteryChart from "../components/charts/BatteryChart";
-import RPMChart from "../components/charts/RPMChart";
-import SpeedChart from "../components/charts/SpeedChart";
+import LiveLineChart from "../components/charts/LiveLineChart";
 
 function Dashboard() {
+  const sensorData = useSensorData();
+
   return (
     <div className="space-y-8">
 
-      {/* Page Title */}
-      <div>
-        <h1 className="text-3xl font-bold text-white">
-          Vehicle Health Dashboard
-        </h1>
-
-        <p className="text-slate-400 mt-2">
-          Real-Time AI Vehicle Monitoring & Predictive Maintenance
-        </p>
-      </div>
+      {/* Page Header */}
+      <PageHeader
+        title="DriveSense AI Command Center"
+        subtitle="Real-Time Edge AI Vehicle Monitoring & Predictive Maintenance"
+      />
 
       {/* Summary Cards */}
-      <SummaryCards />
+      <SummaryCards sensorData={sensorData} />
 
-      {/* Live Sensors */}
-      <SensorGrid />
+      {/* Live Sensor Cards */}
+      <SensorGrid sensorData={sensorData} />
 
-      {/* Charts */}
+      {/* Live Charts */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <TemperatureChart />
-        <BatteryChart />
-        <RPMChart />
-        <SpeedChart />
-      </div>
 
+        <LiveLineChart
+          title="Engine Temperature"
+          value={sensorData.temperature}
+          color="#06B6D4"
+          dataKey="temperature"
+          unit="°C"
+        />
+
+        <LiveLineChart
+          title="Battery Voltage"
+          value={sensorData.battery}
+          color="#FACC15"
+          dataKey="battery"
+          unit="V"
+        />
+
+        <LiveLineChart
+          title="Engine RPM"
+          value={sensorData.rpm}
+          color="#8B5CF6"
+          dataKey="rpm"
+          unit="RPM"
+        />
+
+        <LiveLineChart
+          title="Vehicle Speed"
+          value={sensorData.speed}
+          color="#22C55E"
+          dataKey="speed"
+          unit="km/h"
+        />
+
+      </div>
+<SmartAlerts sensorData={sensorData} />
     </div>
   );
 }

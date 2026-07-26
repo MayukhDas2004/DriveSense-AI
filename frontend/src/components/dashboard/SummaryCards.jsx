@@ -1,59 +1,70 @@
-import { Car, Thermometer, BatteryCharging, Brain } from "lucide-react";
+import {
+  Activity,
+  Car,
+  BatteryCharging,
+  ShieldCheck,
+} from "lucide-react";
 
-const cards = [
-  {
-    title: "Vehicle Health",
-    value: "89%",
-    color: "text-cyan-400",
-    icon: Car,
-  },
-  {
-    title: "Engine Temp",
-    value: "92°C",
-    color: "text-orange-400",
-    icon: Thermometer,
-  },
-  {
-    title: "Battery",
-    value: "12.6V",
-    color: "text-green-400",
-    icon: BatteryCharging,
-  },
-  {
-    title: "AI Status",
-    value: "Normal",
-    color: "text-purple-400",
-    icon: Brain,
-  },
-];
+import SummaryCard from "../common/SummaryCard";
 
-function SummaryCards() {
+function SummaryCards({ sensorData }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-      {cards.map((card, index) => {
-        const Icon = card.icon;
 
-        return (
-          <div
-            key={index}
-            className="bg-slate-900 rounded-2xl p-6 border border-slate-800 hover:border-cyan-500 hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300"
-          >
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-slate-400 text-sm">{card.title}</p>
+      <SummaryCard
+        title="Vehicle Health"
+        value={sensorData.health}
+        unit="%"
+        icon={Car}
+        iconColor="text-cyan-400"
+        valueColor="text-cyan-400"
+        trend="▲ Live Monitoring"
+        trendColor="text-green-400"
+      />
 
-                <h2 className={`text-3xl font-bold mt-2 ${card.color}`}>
-                  {card.value}
-                </h2>
-              </div>
+      <SummaryCard
+        title="Engine Status"
+        value={
+          sensorData.temperature > 100
+            ? "Warning"
+            : "Normal"
+        }
+        icon={Activity}
+        iconColor={
+          sensorData.temperature > 100
+            ? "text-red-400"
+            : "text-green-400"
+        }
+        valueColor={
+          sensorData.temperature > 100
+            ? "text-red-400"
+            : "text-green-400"
+        }
+        trend={`${sensorData.temperature} °C`}
+        trendColor="text-cyan-400"
+      />
 
-              <div className="bg-slate-800 p-3 rounded-xl">
-                <Icon size={30} className={card.color} />
-              </div>
-            </div>
-          </div>
-        );
-      })}
+      <SummaryCard
+        title="Battery"
+        value={sensorData.battery}
+        unit="V"
+        icon={BatteryCharging}
+        iconColor="text-yellow-400"
+        valueColor="text-yellow-400"
+        trend="Healthy"
+        trendColor="text-green-400"
+      />
+
+      <SummaryCard
+        title="AI Status"
+        value="Ready"
+        icon={ShieldCheck}
+        iconColor="text-purple-400"
+        valueColor="text-purple-400"
+        trend={`Updated ${sensorData.updated.toLocaleTimeString()}`}
+        trendColor="text-cyan-400"
+      />
+
     </div>
   );
 }
