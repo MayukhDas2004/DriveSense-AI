@@ -7,16 +7,18 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { time: "10:00", temp: 82 },
-  { time: "10:05", temp: 84 },
-  { time: "10:10", temp: 86 },
-  { time: "10:15", temp: 90 },
-  { time: "10:20", temp: 88 },
-  { time: "10:25", temp: 92 },
-];
 
-function TemperatureChart() {
+
+function TemperatureChart({ sensorData }) {
+  const data =
+    sensorData
+      ? [
+          {
+            time: "Now",
+            temp: sensorData.engineTemperature,
+          },
+        ]
+      : [];
   return (
     <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800">
       <h2 className="text-xl font-semibold text-white mb-4">

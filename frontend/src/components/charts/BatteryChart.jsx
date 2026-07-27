@@ -7,16 +7,17 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { time: "10:00", battery: 98 },
-  { time: "10:05", battery: 97 },
-  { time: "10:10", battery: 97 },
-  { time: "10:15", battery: 96 },
-  { time: "10:20", battery: 95 },
-  { time: "10:25", battery: 95 },
-];
 
-function BatteryChart() {
+function BatteryChart({ sensorData }) {
+  const data =
+    sensorData
+      ? [
+          {
+            time: "Now",
+            battery: sensorData.batteryVoltage,
+          },
+        ]
+      : [];
   return (
     <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800">
       <h2 className="text-xl font-semibold text-white mb-4">

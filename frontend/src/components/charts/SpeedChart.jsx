@@ -7,16 +7,17 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { time: "10:00", speed: 45 },
-  { time: "10:05", speed: 52 },
-  { time: "10:10", speed: 60 },
-  { time: "10:15", speed: 72 },
-  { time: "10:20", speed: 68 },
-  { time: "10:25", speed: 75 },
-];
 
-function SpeedChart() {
+function SpeedChart({ sensorData }) {
+  const data =
+    sensorData
+      ? [
+          {
+            time: "Now",
+            speed: sensorData.speed,
+          },
+        ]
+      : [];
   return (
     <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800">
       <h2 className="text-xl font-semibold text-white mb-4">

@@ -7,20 +7,21 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { time: "10:00", rpm: 2500 },
-  { time: "10:05", rpm: 2800 },
-  { time: "10:10", rpm: 3000 },
-  { time: "10:15", rpm: 3200 },
-  { time: "10:20", rpm: 3100 },
-  { time: "10:25", rpm: 3400 },
-];
 
-function RPMChart() {
+function RPMChart({ sensorData }) {
+  const data =
+  sensorData
+      ? [
+          {
+            time: "Now",
+            vibration: sensorData.vibration,
+          },
+        ]
+      : [];
   return (
     <div className="bg-slate-900 rounded-2xl p-6 border border-slate-800">
       <h2 className="text-xl font-semibold text-white mb-4">
-        Engine RPM
+        Engine Vibration
       </h2>
 
       <ResponsiveContainer width="100%" height={280}>
@@ -30,7 +31,7 @@ function RPMChart() {
           <Tooltip />
 
           <Bar
-            dataKey="rpm"
+            dataKey="vibration"
             fill="#3B82F6"
             radius={[8, 8, 0, 0]}
           />
