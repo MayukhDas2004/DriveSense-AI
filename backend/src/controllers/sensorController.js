@@ -1,6 +1,7 @@
 const SensorData = require("../models/SensorData");
 const Alert = require("../models/Alert");
 const Vehicle = require("../models/Vehicle");
+const Prediction = require("../models/Prediction");
 
 const {
     calculateHealthScore,
@@ -12,6 +13,55 @@ const Maintenance = require("../models/Maintenance");
 const {
     getMaintenanceRecommendations
 } = require("../services/maintenanceService");
+
+
+async function createAlertIfNotExists(
+    vehicleId,
+    alertType,
+    severity,
+    message
+) {
+    const existingAlert = await Alert.findOne({
+        vehicleId: vehicleId,
+        alertType: alertType,
+        status: "Active"
+    });
+
+    //console.log("Checking:", vehicleId, alertType);
+
+    if (existingAlert) {
+        return;
+    }
+
+    await Alert.create({
+        vehicleId,
+        alertType,
+        severity,
+        message
+    });
+}
+
+async function createMaintenanceIfNotExists(
+    vehicleId,
+    recommendation,
+    priority
+) {
+    const existing = await Maintenance.findOne({
+        vehicleId,
+        recommendation,
+        completed: false
+    });
+
+    if (existing) {
+        return;
+    }
+
+    await Maintenance.create({
+        vehicleId,
+        recommendation,
+        priority
+    });
+}
 
 
 // Save Sensor Data
@@ -30,8 +80,20 @@ const createSensorData = async (req, res) => {
         await Vehicle.findOneAndUpdate(
             { vehicleId: req.body.vehicleId },
             {
+                vehicleId: req.body.vehicleId,
+                ownerName: "Demo Owner",
+                model: "DriveSense Demo",
+                manufacturer: "DriveSense AI",
+                year: 2025,
+                registrationNumber: req.body.vehicleId,
+
                 healthScore,
                 status
+            },
+            {
+                returnDocument: "after",
+                upsert: true,
+                runValidators: true
             }
         );
 
@@ -46,48 +108,48 @@ const createSensorData = async (req, res) => {
         // Auto Generate Alerts
 
         if (req.body.engineTemperature > 110) {
-            await Alert.create({
-                vehicleId: req.body.vehicleId,
-                alertType: "Engine Temperature",
-                severity: "Critical",
-                message: "Engine overheating detected"
-            });
+            await createAlertIfNotExists(
+                req.body.vehicleId,
+                "Engine Temperature",
+                "Critical",
+                "Engine overheating detected"
+            );
         }
 
         if (req.body.batteryVoltage < 11.5) {
-            await Alert.create({
-                vehicleId: req.body.vehicleId,
-                alertType: "Battery",
-                severity: "High",
-                message: "Battery voltage is too low"
-            });
+            await createAlertIfNotExists(
+                req.body.vehicleId,
+                "Battery",
+                "High",
+                "Battery voltage is too low"
+            );
         }
 
         if (req.body.oilPressure < 25) {
-            await Alert.create({
-                vehicleId: req.body.vehicleId,
-                alertType: "Oil Pressure",
-                severity: "High",
-                message: "Oil pressure is too low"
-            });
+            await createAlertIfNotExists(
+                req.body.vehicleId,
+                "Oil Pressure",
+                "High",
+                "Oil pressure is too low"
+            );
         }
 
         if (req.body.tirePressure < 30) {
-            await Alert.create({
-                vehicleId: req.body.vehicleId,
-                alertType: "Tire Pressure",
-                severity: "Medium",
-                message: "Tire pressure is below safe level"
-            });
+            await createAlertIfNotExists(
+                req.body.vehicleId,
+                "Tire Pressure",
+                "Medium",
+                "Tire pressure is below safe level"
+            );
         }
 
         if (req.body.vibration > 4) {
-            await Alert.create({
-                vehicleId: req.body.vehicleId,
-                alertType: "Engine Vibration",
-                severity: "High",
-                message: "Abnormal engine vibration detected"
-            });
+            await createAlertIfNotExists(
+                req.body.vehicleId,
+                "Engine Vibration",
+                "High",
+                "Abnormal engine vibration detected"
+            );
         }
 
         // Generate Maintenance Recommendations
@@ -95,12 +157,24 @@ const createSensorData = async (req, res) => {
         const recommendations = getMaintenanceRecommendations(req.body);
 
         for (const item of recommendations) {
-            await Maintenance.create({
-                vehicleId: req.body.vehicleId,
-                recommendation: item.recommendation,
-                priority: item.priority
-            });
+            await createMaintenanceIfNotExists(
+                req.body.vehicleId,
+                item.recommendation,
+                item.priority
+            );
         }
+
+        await Prediction.create({
+            vehicleId: req.body.vehicleId,
+            predictedFault: status === "Healthy" ? "Normal" : "Potential Failure",
+            confidence: status === "Healthy" ? 95 : 85,
+            status,
+            healthScore,
+            recommendedAction:
+                status === "Healthy"
+                    ? "No action required"
+                    : "Inspect vehicle immediately"
+        });
 
     } catch (error) {
         res.status(500).json({

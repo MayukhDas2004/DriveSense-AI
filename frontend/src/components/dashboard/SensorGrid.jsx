@@ -88,7 +88,10 @@ function SensorGrid({ sensorData }) {
                 </p>
 
                 <h2 className={`text-2xl font-bold mt-2 ${sensor.color}`}>
-                  {sensor.value}
+                  {sensor.value !== "N/A" && typeof sensor.value === "number"
+                    ? sensor.value.toFixed(2)
+                    : sensor.value}
+
                   {sensor.value !== "N/A" && (
                     <span className="text-base ml-1">
                       {sensor.unit}
