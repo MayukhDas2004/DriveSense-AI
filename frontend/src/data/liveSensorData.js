@@ -1,0 +1,87 @@
+import {
+  FaTemperatureHigh,
+  FaCarBattery,
+  FaTachometerAlt,
+  FaGasPump,
+  FaOilCan,
+} from "react-icons/fa";
+
+import {
+  GiCarWheel,
+  GiSpeedometer,
+} from "react-icons/gi";
+
+export const liveSensorData = [
+  {
+    id: 1,
+    title: "Engine Temperature",
+    value: 92,
+    unit: "°C",
+    icon: FaTemperatureHigh,
+    color: "text-orange-400",
+    status: "Normal",
+  },
+  {
+    id: 2,
+    title: "Battery Voltage",
+    value: 12.6,
+    unit: "V",
+    icon: FaCarBattery,
+    color: "text-green-400",
+    status: "Healthy",
+  },
+  {
+    id: 3,
+    title: "Engine RPM",
+    value: 3200,
+    unit: "RPM",
+    icon: FaTachometerAlt,
+    color: "text-cyan-400",
+    status: "Normal",
+  },
+  {
+    id: 4,
+    title: "Vehicle Speed",
+    value: 72,
+    unit: "km/h",
+    icon: GiSpeedometer,
+    color: "text-emerald-400",
+    status: "Running",
+  },
+  {
+    id: 5,
+    title: "Tire Pressure",
+    value: 32,
+    unit: "PSI",
+    icon: GiCarWheel,
+    color: "text-violet-400",
+    status: "Optimal",
+  },
+  {
+    id: 6,
+    title: "Fuel Level",
+    value: 68,
+    unit: "%",
+    icon: FaGasPump,
+    color: "text-yellow-400",
+    status: "Good",
+  },
+  {
+    id: 7,
+    title: "Oil Temperature",
+    value: 95,
+    unit: "°C",
+    icon: FaOilCan,
+    color: "text-orange-500",
+    status: "Normal",
+  },
+  {
+    id: 8,
+    title: "Engine Vibration",
+    value: 0.12,
+    unit: "g",
+    icon: FaTachometerAlt,
+    color: "text-pink-400",
+    status: "Stable",
+  },
+];
